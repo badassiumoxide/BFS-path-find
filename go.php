@@ -36,7 +36,7 @@ function bfs() {
 		$u = $q->bottom(); // q.front
 		$q->dequeue(); // q.pop
 		$flag = false;
-		for ($k = 0; $k < 4; $k++) {
+		for ($k = 0; $k < 4; $k++) { // $k < 8 if diagonal move needed
 			$vi = $di[$k] + $u[0];
 			$vj = $dj[$k] + $u[1];
 			if (boundary($vi, $vj)) {
