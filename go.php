@@ -1,5 +1,5 @@
 <?php
-// Variables
+
 $grid = array();
 $visit = array();
 $parent = array();
