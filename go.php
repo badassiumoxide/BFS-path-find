@@ -1,5 +1,6 @@
 <?php
 
+// Variables
 $grid = array();
 $visit = array();
 $parent = array();
@@ -33,10 +34,10 @@ function bfs() {
 	$q->push([$_POST['sR'], $_POST['sC']]);
 	$visit[$_POST['sR']][$_POST['sC']] = 1;
 	while (!$q->isEmpty()) {
-		$u = $q->bottom(); // q.front
-		$q->dequeue(); // q.pop
+		$u = $q->bottom();
+		$q->dequeue();
 		$flag = false;
-		for ($k = 0; $k < 4; $k++) { // $k < 8 if diagonal move needed
+		for ($k = 0; $k < 4; $k++) {
 			$vi = $di[$k] + $u[0];
 			$vj = $dj[$k] + $u[1];
 			if (boundary($vi, $vj)) {
@@ -55,7 +56,7 @@ function bfs() {
 		}
 		if ($flag) break;
 	}
-	// Now mark the path so that we can color 
+	// Now mark the path so that we can color that cell of the table
 	make_path($_POST['dR'], $_POST['dC']);
 }
 
@@ -70,7 +71,7 @@ function print_def() {
 				echo '<td style="background: grey; text-align: center;"><strong>R-' . $room . '</strong><br><small>(' . $r . ', ' . $c . ')</small></td>';
 				$room++;
 			} else if ($grid[$r][$c] == 3) {
-				echo '<td style="text-align: center;"><small><strong>enter</strong><br>(' . $r . ', ' . $c . ')</small></td>';
+				echo '<td style="text-align: center;"><small><strong>door</strong><br>(' . $r . ', ' . $c . ')</small></td>';
 			} else {
 				echo '<td style="text-align: center;"><small>(' . $r . ', ' . $c . ')</small></td>';
 			}
@@ -99,7 +100,7 @@ function print_with_path() {
 					echo '<td style="background: yellow; text-align: center;"><small>(' . $r . ', ' . $c . ')</small></td>';
 				}
 			} else if ($grid[$r][$c] == 3) {
-				echo '<td style="text-align: center;"><small><strong>enter</strong><br>(' . $r . ', ' . $c . ')</small></td>';
+				echo '<td style="text-align: center;"><small><strong>door</strong><br>(' . $r . ', ' . $c . ')</small></td>';
 			} else {
 				echo '<td style="text-align: center;"><small>(' . $r . ', ' . $c . ')</small></td>';
 			}
@@ -126,10 +127,10 @@ for ($r = 1; $r <= 16; $r++) {
 	}
 }
 
-// Settings: 0 = empty_space | 1 = faculty | 2 = path | 3 = entrance 
+// Setting which room is for faculty | 0 = empty_space | 1 = faculty | 2 = path | 3 = entrance 
 for ($r = 1; $r <= 16; $r++) {
 	for ($c = 1; $c <= 12; $c++) {
-		if (($r == 1 && $c == 6) || ($r == 1 && $c == 7)) { // to add side entry ($r == 9 && $c == 12)
+		if (($r == 1 && $c == 6) || ($r == 1 && $c == 7) || ($r == 9 && $c == 12)) {
 			$grid[$r][$c] = 3;
 		} else if ($c == 1) {
 			$grid[$r][$c] = $visit[$r][$c] = 1;
@@ -148,12 +149,9 @@ for ($r = 1; $r <= 16; $r++) {
 }
 
 if (isset($_POST['GO'])) {
-	if (boundary($_POST['sR'], $_POST['sC']) && boundary($_POST['dR'], $_POST['dC'])) {
-		bfs();
-	} else {
-		// alert 
-	}
+	bfs();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -167,13 +165,13 @@ if (isset($_POST['GO'])) {
   	<div align="center">
 			<label align="center" style="font-size: 25px;">Faculty Office</label><br>
 			<small style="font-style: italic;">(Enter the row and column number)</small><br><br>
-			<small>START</small><br>
-  		<input type="number" min="1" max="16" name="sR" placeholder="R" required="">
-			<input type="number" min="1" max="12" name="sC" placeholder="C" required="">
+			START &nbsp;
+  		<input type="text" name="sR">
+	    <input type="text" name="sC">
 			<br><br>
-			<small>STOP</small><br>
-			<input type="number" min="1" max="16" name="dR" placeholder="R" required="">
-			<input type="number" min="1" max="12" name="dC" placeholder="C" required="">
+			STOP &nbsp &nbsp;
+			<input type="text" name="dR">
+	    <input type="text" name="dC">
 	    <br>
 	    <br>
 	    <input type="submit" value="GO" name="GO" />
